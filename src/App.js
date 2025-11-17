@@ -1,20 +1,55 @@
+import { Container } from "@mui/material";
+import TodoWidget from "./Components/TodoWidget";
+import EditTodoPopup from "./Components/EditTodoPopup";
+import DeleteTodoPopup from "./Components/DeleteTodoPopup";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { purple, green } from "@mui/material/colors";
+
 function App() {
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: green[900],
+      },
+      secondary: {
+        main: purple[500],
+      },
+    },
+    typography: {
+      fontFamily: [
+        "-apple-system",
+        "BlinkMacSystemFont",
+        '"Segoe UI"',
+        "Roboto",
+        '"Helvetica Neue"',
+        "Arial",
+        "sans-serif",
+        '"Apple Color Emoji"',
+        '"Segoe UI Emoji"',
+        '"Segoe UI Symbol"',
+      ].join(","),
+    },
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <div
+        style={{
+          width: "100vw",
+          height: "100vh",
+          backgroundColor: "black",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {/* <EditTodoPopup /> */}
+        {/* <DeleteTodoPopup /> */}
+        <Container maxWidth="md" style={{}}>
+          <TodoWidget />
+        </Container>
+      </div>
+    </ThemeProvider>
   );
 }
 
