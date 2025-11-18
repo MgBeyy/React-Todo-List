@@ -6,13 +6,11 @@ import Typography from "@mui/material/Typography";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
+import { useContext } from "react";
+import { TaskContext } from "../Contexts/TaskContext";
 
-export default function Todo({
-  task,
-  onDoneClick,
-  onDeleteClick,
-  onEditClick,
-}) {
+export default function Todo({ task }) {
+  const { onDoneClick, onDeleteClick, onEditClick } = useContext(TaskContext);
   return (
     <Accordion
       key={task.key}
@@ -23,11 +21,7 @@ export default function Todo({
         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.4)",
       }}
     >
-      <AccordionSummary
-        component="div"
-        aria-controls="panel1-content"
-        id="panel1-header"
-      >
+      <AccordionSummary aria-controls="panel1-content" id="panel1-header">
         <div
           style={{
             display: "flex",
