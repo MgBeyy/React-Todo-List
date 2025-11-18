@@ -9,6 +9,7 @@ import EditTodoPopup from "./EditTodoPopup";
 import DeleteTodoPopup from "./DeleteTodoPopup";
 import { useState, useEffect } from "react";
 import { TaskContext } from "../Contexts/TaskContext";
+import SimpleSnackbar from "./SimpleSnackbar";
 
 export default function TodoWidget() {
   const [tasks, setTasks] = useState([]);
@@ -30,6 +31,15 @@ export default function TodoWidget() {
       setTasks(JSON.parse(storedTasks));
     }
   }, []);
+  const [snack, setSnackbar] = useState(false);
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackbar(false);
+  };
 
   const onDoneClick = (key) => {
     const updatedTasks = tasks.map((task) =>
@@ -54,6 +64,7 @@ export default function TodoWidget() {
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
     setEditPopup(false);
     setEditingTask(null);
+    setSnackbar(true);
   };
 
   const handleAddNewTask = () => {
@@ -69,6 +80,7 @@ export default function TodoWidget() {
       description: "",
       done: false,
     });
+    setSnackbar(true);
   };
 
   const deleteTask = (id) => {
@@ -76,6 +88,7 @@ export default function TodoWidget() {
     setTasks(updatedTasks);
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
     setDeletePopup(false);
+    setSnackbar(true);
   };
 
   const onCloseEditClick = (key) => {
@@ -88,6 +101,7 @@ export default function TodoWidget() {
 
   return (
     <>
+      <SimpleSnackbar handleClose={handleClose} open={snack} />
       {editPopup && (
         <EditTodoPopup
           task={editingTask}
