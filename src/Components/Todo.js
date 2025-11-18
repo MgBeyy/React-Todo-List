@@ -31,7 +31,12 @@ export default function Todo({ task }) {
           }}
         >
           <div>
-            <Typography variant="h4">{task.text}</Typography>
+            <Typography
+              variant="h4"
+              sx={{ textDecoration: task.done ? "line-through" : "none" }}
+            >
+              {task.text}
+            </Typography>
           </div>
           <div
             style={{
@@ -75,7 +80,12 @@ export default function Todo({ task }) {
         </div>
       </AccordionSummary>
       <AccordionDetails>
-        <Typography variant="subtitle1">{task.description}</Typography>
+        <Typography
+          variant="subtitle1"
+          sx={{ textDecoration: task.done ? "line-through" : "none" }}
+        >
+          {task.description}
+        </Typography>
       </AccordionDetails>
     </Accordion>
   );
