@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
-export default function DeleteTodoPopup() {
+export default function DeleteTodoPopup({ onClose, onSubmit, taskKey }) {
   return (
     <div
       style={{
@@ -43,10 +43,10 @@ export default function DeleteTodoPopup() {
             marginTop: "30px",
           }}
         >
-          <Button color="error" style={{}}>
+          <Button color="error" onClick={onClose}>
             Cancel
           </Button>
-          <Button>Delete</Button>
+          <Button onClick={() => onSubmit(taskKey)}>Delete</Button>
         </div>
       </div>
     </div>

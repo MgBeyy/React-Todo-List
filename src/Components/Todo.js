@@ -7,9 +7,15 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 
-export default function Todo({ text }) {
+export default function Todo({
+  task,
+  onDoneClick,
+  onDeleteClick,
+  onEditClick,
+}) {
   return (
     <Accordion
+      key={task.key}
       style={{
         padding: "10px",
         marginBottom: "10px",
@@ -18,7 +24,7 @@ export default function Todo({ text }) {
       }}
     >
       <AccordionSummary
-        // expandIcon={<ExpandMoreIcon />}
+        component="div"
         aria-controls="panel1-content"
         id="panel1-header"
       >
@@ -31,7 +37,7 @@ export default function Todo({ text }) {
           }}
         >
           <div>
-            <Typography variant="h4">{text}</Typography>
+            <Typography variant="h4">{task.text}</Typography>
           </div>
           <div
             style={{
@@ -40,20 +46,42 @@ export default function Todo({ text }) {
               gap: "10px",
             }}
           >
-            <IconButton aria-label="done">
-              <CheckCircleOutlinedIcon />
+            <IconButton
+              aria-label="done"
+              onClick={(event) => {
+                event.stopPropagation();
+                onDoneClick(task.key);
+              }}
+            >
+              {task.done ? (
+                <CheckCircleOutlinedIcon color="success" />
+              ) : (
+                <CheckCircleOutlinedIcon />
+              )}
             </IconButton>
-            <IconButton aria-label="edit">
+            <IconButton
+              aria-label="edit"
+              onClick={(event) => {
+                event.stopPropagation();
+                onEditClick(task);
+              }}
+            >
               <EditIcon />
             </IconButton>
-            <IconButton aria-label="delete">
+            <IconButton
+              aria-label="delete"
+              onClick={(event) => {
+                event.stopPropagation();
+                onDeleteClick(task.key);
+              }}
+            >
               <HighlightOffIcon />
             </IconButton>
           </div>
         </div>
       </AccordionSummary>
       <AccordionDetails>
-        <Typography variant="subtitle1">Description</Typography>
+        <Typography variant="subtitle1">{task.description}</Typography>
       </AccordionDetails>
     </Accordion>
   );

@@ -1,8 +1,10 @@
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { useState } from "react";
 
-export default function EditTodoPopup() {
+export default function EditTodoPopup({ onClose, onSave, task }) {
+  const [currentTask, setCurrentTask] = useState(task);
   return (
     <div
       style={{
@@ -34,14 +36,20 @@ export default function EditTodoPopup() {
         <TextField
           id="outlined-basic"
           label="Todo Title"
+          defaultValue={currentTask.text}
           variant="standard"
-          style={{}}
+          onChange={(e) =>
+            setCurrentTask({ ...currentTask, text: e.target.value })
+          }
         />
         <TextField
           id="outlined-basic"
           label="Todo Description"
+          defaultValue={currentTask.description}
           variant="standard"
-          style={{}}
+          onChange={(e) =>
+            setCurrentTask({ ...currentTask, description: e.target.value })
+          }
         />
         <div
           style={{
@@ -52,10 +60,10 @@ export default function EditTodoPopup() {
             marginTop: "30px",
           }}
         >
-          <Button color="error" style={{}}>
+          <Button color="error" onClick={onClose}>
             Cancel
           </Button>
-          <Button>Save</Button>
+          <Button onClick={() => onSave(task.key, currentTask)}>Save</Button>
         </div>
       </div>
     </div>

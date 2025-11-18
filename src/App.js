@@ -1,7 +1,6 @@
 import { Container } from "@mui/material";
 import TodoWidget from "./Components/TodoWidget";
-import EditTodoPopup from "./Components/EditTodoPopup";
-import DeleteTodoPopup from "./Components/DeleteTodoPopup";
+
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { purple, green } from "@mui/material/colors";
 
@@ -43,8 +42,6 @@ function App() {
           justifyContent: "center",
         }}
       >
-        {/* <EditTodoPopup /> */}
-        {/* <DeleteTodoPopup /> */}
         <Container maxWidth="md" style={{}}>
           <TodoWidget />
         </Container>
