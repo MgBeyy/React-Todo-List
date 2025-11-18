@@ -198,6 +198,7 @@ export default function TodoWidget() {
             onClick={() => {
               handleAddNewTask();
             }}
+            disabled={!newTask.text}
           >
             Add new task
           </Button>
