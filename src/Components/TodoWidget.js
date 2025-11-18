@@ -6,53 +6,36 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import EditTodoPopup from "./EditTodoPopup";
 import DeleteTodoPopup from "./DeleteTodoPopup";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { TaskContext } from "../Contexts/TaskContext";
 
 export default function TodoWidget() {
-  const todos = [
-    {
-      key: 1,
-      text: "Task 1",
-      description: "Description for Task 1",
-      done: true,
-    },
-    {
-      key: 2,
-      text: "Task 2",
-      description: "Description for Task 2",
-      done: true,
-    },
-    {
-      key: 3,
-      text: "Task 3",
-      description: "Description for Task 3",
-      done: false,
-    },
-    {
-      key: 4,
-      text: "Task 4",
-      description: "Description for Task 4",
-      done: true,
-    },
-  ];
-  const [tasks, setTasks] = useState(todos);
+  const [tasks, setTasks] = useState([]);
   const [editingTask, setEditingTask] = useState(null);
   const [deletingTaskKey, setDeletingTaskKey] = useState(null);
   const [editPopup, setEditPopup] = useState(false);
   const [deletePopup, setDeletePopup] = useState(false);
+  const [taskFilter, setTaskFilter] = useState("all");
   const [newTask, setNewTask] = useState({
     key: tasks.length + 1,
     text: "",
     description: "",
     done: false,
   });
-  const [taskFilter, setTaskFilter] = useState("all");
+
+  useEffect(() => {
+    const storedTasks = localStorage.getItem("tasks");
+    if (storedTasks) {
+      setTasks(JSON.parse(storedTasks));
+    }
+  }, []);
+
   const onDoneClick = (key) => {
-    setTasks(
-      tasks.map((task) =>
-        task.key === key ? { ...task, done: !task.done } : task
-      )
+    const updatedTasks = tasks.map((task) =>
+      task.key === key ? { ...task, done: !task.done } : task
     );
+    setTasks(updatedTasks);
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
   };
 
   const saveTaskUpdate = (id, newTask) => {
@@ -67,24 +50,31 @@ export default function TodoWidget() {
       return todo;
     });
     setTasks(updatedTasks);
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
     setEditPopup(false);
     setEditingTask(null);
+  };
+
+  const handleAddNewTask = () => {
+    if (!newTask.text) return;
+    const lastKey = tasks.length > 0 ? tasks[tasks.length - 1].key : 0;
+    const newKey = lastKey + 1;
+    const newT = { ...newTask, key: newKey };
+    setTasks([...tasks, newT]);
+    localStorage.setItem("tasks", JSON.stringify([...tasks, newT]));
+    setNewTask({
+      key: newKey + 1,
+      text: "",
+      description: "",
+      done: false,
+    });
   };
 
   const deleteTask = (id) => {
     const updatedTasks = tasks.filter((task) => task.key !== id);
     setTasks(updatedTasks);
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
     setDeletePopup(false);
-  };
-
-  const OnEditClick = (task) => {
-    setEditPopup(true);
-    setEditingTask(task);
-  };
-
-  const OnDeleteClick = (key) => {
-    setDeletePopup(true);
-    setDeletingTaskKey(key);
   };
 
   const onCloseEditClick = (key) => {
@@ -146,13 +136,21 @@ export default function TodoWidget() {
             padding: "0 16px 16px",
           }}
         >
-          <TodoList
-            filter={taskFilter}
-            tasks={tasks}
-            onDoneClick={onDoneClick}
-            onDeleteClick={OnDeleteClick}
-            onEditClick={OnEditClick}
-          />
+          <TaskContext.Provider
+            value={{
+              onDoneClick,
+              onDeleteClick: (key) => {
+                setDeletePopup(true);
+                setDeletingTaskKey(key);
+              },
+              onEditClick: (task) => {
+                setEditingTask(task);
+                setEditPopup(true);
+              },
+            }}
+          >
+            <TodoList filter={taskFilter} tasks={tasks} />
+          </TaskContext.Provider>
         </div>
         <div
           style={{
@@ -174,20 +172,7 @@ export default function TodoWidget() {
             variant="contained"
             style={{ width: "40%" }}
             onClick={() => {
-              if (!newTask.text) return;
-              const lastKey =
-                tasks.length > 0 ? tasks[tasks.length - 1].key : 0;
-              const newKey = lastKey + 1;
-              const newT = { ...newTask, key: newKey };
-              console.log(newKey);
-              console.log(newT);
-              setTasks([...tasks, newT]);
-              setNewTask({
-                key: newKey + 1,
-                text: "",
-                description: "",
-                done: false,
-              });
+              handleAddNewTask();
             }}
           >
             Add new task
