@@ -1,6 +1,7 @@
 import TodoList from "./TodoList";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Button from "@mui/material/Button";
-import ButtonGroup from "@mui/material/ButtonGroup";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
@@ -123,11 +124,20 @@ export default function TodoWidget() {
             },
           }}
         >
-          <ButtonGroup variant="outlined" aria-label="Basic button group">
-            <Button onClick={() => setTaskFilter("all")}>All</Button>
-            <Button onClick={() => setTaskFilter("done")}>Done</Button>
-            <Button onClick={() => setTaskFilter("todo")}>Todo</Button>
-          </ButtonGroup>
+          <ToggleButtonGroup
+            variant="outlined"
+            exclusive
+            value={taskFilter}
+            color="primary"
+            aria-label="Basic button group"
+            onChange={(e) => {
+              setTaskFilter(e.target.value);
+            }}
+          >
+            <ToggleButton value="all">All</ToggleButton>
+            <ToggleButton value="done">Done</ToggleButton>
+            <ToggleButton value="todo">Todo</ToggleButton>
+          </ToggleButtonGroup>
         </Box>
         <div
           style={{
