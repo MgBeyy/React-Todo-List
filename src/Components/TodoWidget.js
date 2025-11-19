@@ -9,78 +9,44 @@ import {
 } from "@mui/material";
 import EditTodoPopup from "./EditTodoPopup";
 import DeleteTodoPopup from "./DeleteTodoPopup";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import { TaskContext } from "../Contexts/TaskContext";
 import { useToast } from "../Contexts/ToastContext";
+import todoReducer from "../Reducers/todoReducer";
 
 export default function TodoWidget() {
   const { showToastBar } = useToast();
-  const [tasks, setTasks] = useState([]);
+  const [todos, dispatch] = useReducer(todoReducer, []);
   const [editingTask, setEditingTask] = useState(null);
   const [deletingTaskKey, setDeletingTaskKey] = useState(null);
   const [editPopup, setEditPopup] = useState(false);
   const [deletePopup, setDeletePopup] = useState(false);
   const [taskFilter, setTaskFilter] = useState("all");
-  const [newTask, setNewTask] = useState({
-    key: tasks.length + 1,
-    text: "",
-    description: "",
-    done: false,
-  });
+  const [newTaskInput, setnewTaskInput] = useState("");
 
   useEffect(() => {
-    const storedTasks = localStorage.getItem("tasks");
-    if (storedTasks) {
-      setTasks(JSON.parse(storedTasks));
-    }
+    dispatch({ type: "get", payload: {} });
   }, []);
   const onDoneClick = (key) => {
-    const updatedTasks = tasks.map((task) =>
-      task.key === key ? { ...task, done: !task.done } : task
-    );
-    setTasks(updatedTasks);
-    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+    dispatch({ type: "done", payload: { key } });
     showToastBar("Successfully updated task");
   };
 
   const saveTaskUpdate = (id, newTask) => {
-    const updatedTasks = tasks.map((todo) => {
-      if (todo.key === id) {
-        return {
-          ...todo,
-          text: newTask.text,
-          description: newTask.description,
-        };
-      }
-      return todo;
-    });
-    setTasks(updatedTasks);
-    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+    dispatch({ type: "updated", payload: { id, newTask } });
     setEditPopup(false);
     setEditingTask(null);
     showToastBar("Successfully updated task");
   };
 
   const handleAddNewTask = () => {
-    if (!newTask.text) return;
-    const lastKey = tasks.length > 0 ? tasks[tasks.length - 1].key : 0;
-    const newKey = lastKey + 1;
-    const newT = { ...newTask, key: newKey };
-    setTasks([...tasks, newT]);
-    localStorage.setItem("tasks", JSON.stringify([...tasks, newT]));
-    setNewTask({
-      key: newKey + 1,
-      text: "",
-      description: "",
-      done: false,
-    });
+    dispatch({ type: "added", payload: { newTaskInput } });
+    setnewTaskInput("");
     showToastBar("Successfully added new task");
   };
 
   const deleteTask = (id) => {
-    const updatedTasks = tasks.filter((task) => task.key !== id);
-    setTasks(updatedTasks);
-    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+    dispatch({ type: "deleted", payload: { id } });
     setDeletePopup(false);
     showToastBar("Successfully deleted task");
   };
@@ -166,7 +132,7 @@ export default function TodoWidget() {
               },
             }}
           >
-            <TodoList filter={taskFilter} tasks={tasks} />
+            <TodoList filter={taskFilter} tasks={todos} />
           </TaskContext.Provider>
         </div>
         <div
@@ -181,9 +147,9 @@ export default function TodoWidget() {
             id="outlined-basic"
             label="Todo Title"
             variant="outlined"
-            value={newTask.text}
+            value={newTaskInput}
             style={{ width: "60%" }}
-            onChange={(e) => setNewTask({ ...newTask, text: e.target.value })}
+            onChange={(e) => setnewTaskInput(e.target.value)}
           />
           <Button
             variant="contained"
@@ -191,7 +157,7 @@ export default function TodoWidget() {
             onClick={() => {
               handleAddNewTask();
             }}
-            disabled={!newTask.text}
+            disabled={!newTaskInput}
           >
             Add new task
           </Button>
