@@ -1,17 +1,20 @@
 import TodoList from "./TodoList";
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
+import {
+  ToggleButton,
+  ToggleButtonGroup,
+  Button,
+  Box,
+  TextField,
+  Typography,
+} from "@mui/material";
 import EditTodoPopup from "./EditTodoPopup";
 import DeleteTodoPopup from "./DeleteTodoPopup";
 import { useState, useEffect } from "react";
 import { TaskContext } from "../Contexts/TaskContext";
-import SimpleSnackbar from "./SimpleSnackbar";
+import { useToast } from "../Contexts/ToastContext";
 
 export default function TodoWidget() {
+  const { showToastBar } = useToast();
   const [tasks, setTasks] = useState([]);
   const [editingTask, setEditingTask] = useState(null);
   const [deletingTaskKey, setDeletingTaskKey] = useState(null);
@@ -31,22 +34,13 @@ export default function TodoWidget() {
       setTasks(JSON.parse(storedTasks));
     }
   }, []);
-  const [snack, setSnackbar] = useState(false);
-
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setSnackbar(false);
-  };
-
   const onDoneClick = (key) => {
     const updatedTasks = tasks.map((task) =>
       task.key === key ? { ...task, done: !task.done } : task
     );
     setTasks(updatedTasks);
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+    showToastBar("Successfully updated task");
   };
 
   const saveTaskUpdate = (id, newTask) => {
@@ -64,7 +58,7 @@ export default function TodoWidget() {
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
     setEditPopup(false);
     setEditingTask(null);
-    setSnackbar(true);
+    showToastBar("Successfully updated task");
   };
 
   const handleAddNewTask = () => {
@@ -80,7 +74,7 @@ export default function TodoWidget() {
       description: "",
       done: false,
     });
-    setSnackbar(true);
+    showToastBar("Successfully added new task");
   };
 
   const deleteTask = (id) => {
@@ -88,7 +82,7 @@ export default function TodoWidget() {
     setTasks(updatedTasks);
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
     setDeletePopup(false);
-    setSnackbar(true);
+    showToastBar("Successfully deleted task");
   };
 
   const onCloseEditClick = (key) => {
@@ -101,7 +95,6 @@ export default function TodoWidget() {
 
   return (
     <>
-      <SimpleSnackbar handleClose={handleClose} open={snack} />
       {editPopup && (
         <EditTodoPopup
           task={editingTask}

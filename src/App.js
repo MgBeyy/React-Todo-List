@@ -1,6 +1,6 @@
 import { Container } from "@mui/material";
 import TodoWidget from "./Components/TodoWidget";
-
+import { ToastProvider } from "./Contexts/ToastContext";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { purple, green } from "@mui/material/colors";
 
@@ -32,20 +32,22 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <div
-        style={{
-          width: "100vw",
-          height: "100vh",
-          backgroundColor: "black",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Container maxWidth="md" style={{}}>
-          <TodoWidget />
-        </Container>
-      </div>
+      <ToastProvider>
+        <div
+          style={{
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "black",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Container maxWidth="md" style={{}}>
+            <TodoWidget />
+          </Container>
+        </div>
+      </ToastProvider>
     </ThemeProvider>
   );
 }
