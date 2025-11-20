@@ -6,7 +6,7 @@ export default function TodoList({ tasks, filter }) {
       {tasks.map((task) =>
         filter === "done" && !task.done ? null : filter === "todo" &&
           task.done ? null : (
-          <Todo task={task} />
+          <Todo task={task} key={task.key} />
         )
       )}
     </div>

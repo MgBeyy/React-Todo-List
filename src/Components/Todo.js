@@ -21,7 +21,11 @@ export default function Todo({ task }) {
         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.4)",
       }}
     >
-      <AccordionSummary aria-controls="panel1-content" id="panel1-header">
+      <AccordionSummary
+        component="div"
+        aria-controls="panel1-content"
+        id="panel1-header"
+      >
         <div
           style={{
             display: "flex",

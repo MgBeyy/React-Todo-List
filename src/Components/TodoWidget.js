@@ -9,14 +9,24 @@ import {
 } from "@mui/material";
 import EditTodoPopup from "./EditTodoPopup";
 import DeleteTodoPopup from "./DeleteTodoPopup";
-import { useState, useEffect, useReducer } from "react";
+import { useState, useEffect } from "react";
 import { TaskContext } from "../Contexts/TaskContext";
 import { useToast } from "../Contexts/ToastContext";
-import todoReducer from "../Reducers/todoReducer";
+
+import { useSelector, useDispatch } from "react-redux";
+import {
+  addTodo,
+  updateTodo,
+  deleteTodo,
+  getTodos,
+  doneTodo,
+} from "../features/Todo/todosSlice";
 
 export default function TodoWidget() {
+  const todosDispatch = useDispatch();
+  const todosS = useSelector((state) => state.todos.todos);
+
   const { showToastBar } = useToast();
-  const [todos, dispatch] = useReducer(todoReducer, []);
   const [editingTask, setEditingTask] = useState(null);
   const [deletingTaskKey, setDeletingTaskKey] = useState(null);
   const [editPopup, setEditPopup] = useState(false);
@@ -25,28 +35,28 @@ export default function TodoWidget() {
   const [newTaskInput, setnewTaskInput] = useState("");
 
   useEffect(() => {
-    dispatch({ type: "get", payload: {} });
-  }, []);
+    todosDispatch(getTodos());
+  }, [todosDispatch]);
   const onDoneClick = (key) => {
-    dispatch({ type: "done", payload: { key } });
+    todosDispatch(doneTodo({ id: key }));
     showToastBar("Successfully updated task");
   };
 
   const saveTaskUpdate = (id, newTask) => {
-    dispatch({ type: "updated", payload: { id, newTask } });
+    todosDispatch(updateTodo({ id, newTask }));
     setEditPopup(false);
     setEditingTask(null);
     showToastBar("Successfully updated task");
   };
 
   const handleAddNewTask = () => {
-    dispatch({ type: "added", payload: { newTaskInput } });
+    todosDispatch(addTodo({ newTaskInput }));
     setnewTaskInput("");
     showToastBar("Successfully added new task");
   };
 
   const deleteTask = (id) => {
-    dispatch({ type: "deleted", payload: { id } });
+    todosDispatch(deleteTodo({ id }));
     setDeletePopup(false);
     showToastBar("Successfully deleted task");
   };
@@ -132,7 +142,7 @@ export default function TodoWidget() {
               },
             }}
           >
-            <TodoList filter={taskFilter} tasks={todos} />
+            <TodoList filter={taskFilter} tasks={todosS} />
           </TaskContext.Provider>
         </div>
         <div
