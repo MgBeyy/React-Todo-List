@@ -18,6 +18,9 @@ The application includes fundamental CRUD (Create, Read, Update, Delete) operati
 * **React** (Hooks: `useState`)
 * **Material UI (MUI)** (For styling and components)
 * **JavaScript (ES6+)**
+* **Redux for state managment**
+
+
 
 ## 📷 Screenshot
 
