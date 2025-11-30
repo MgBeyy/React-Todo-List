@@ -4,6 +4,8 @@ This is a simple learning project built with **React** and **Material UI** to pr
 
 The application includes fundamental CRUD (Create, Read, Update, Delete) operations.
 
+---
+
 ## 🚀 Features
 
 * **Add Task:** Create new tasks with a title.
@@ -13,6 +15,8 @@ The application includes fundamental CRUD (Create, Read, Update, Delete) operati
 * **Filtering:** Filter the list by "All", "Done", or "Todo".
 * **UI Design:** Uses Material UI components (Accordion, Buttons, Icons) for a clean interface.
 
+---
+
 ## 🛠️ Technologies Used
 
 * **React** (Hooks: `useState`)
@@ -20,7 +24,7 @@ The application includes fundamental CRUD (Create, Read, Update, Delete) operati
 * **JavaScript (ES6+)**
 * **Redux for state managment**
 
-
+---
 
 ## 📷 Screenshot
 
