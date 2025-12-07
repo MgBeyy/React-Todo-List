@@ -13,7 +13,7 @@ The application includes fundamental CRUD (Create, Read, Update, Delete) operati
 * **Delete Task:** Remove tasks with a confirmation popup.
 * **Mark as Done:** Toggle the completion status of tasks.
 * **Filtering:** Filter the list by "All", "Done", or "Todo".
-* **UI Design:** Uses Material UI components (Accordion, Buttons, Icons) for a clean interface.
+* **UI Design:** Uses Material UI components (Accordion, Buttons, Icons) for a perfect interface.
 
 ---
 
