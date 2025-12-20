@@ -37,4 +37,4 @@ The application includes fundamental CRUD (Create, Read, Update, Delete) operati
 
 ---
 
-This project was created for educational purposes to understand React component structure and state handling. Open to improvements! Thanks in advice
+This project was created for educational purposes to understand React component structure and state handling. Open to improvements! Thanks in advice :]
